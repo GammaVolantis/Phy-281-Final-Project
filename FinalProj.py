@@ -11,7 +11,6 @@ ball = sphere(pos=vec(0,.6,9.144), vel=vec(0,0,-0.005), mass=6.35, radius=.04, m
 lane = box(pos=vec(0,0,0), width=1.0668, height=18.288, color=color.red) 
 lane.rotate(axis=vec(1,0,0), angle=pi/2, origin=lane.pos)
 
-
 #MAIN LOOP START
 t = 0
 while True:
