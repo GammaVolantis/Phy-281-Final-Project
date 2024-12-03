@@ -4,9 +4,9 @@ dt = 0.01
 vp.scene.camera.pos = vp.vec(0,1.5,-4.5)
 
 # A 14 lb (6.35 kg) Bowling Ball with 10 initial velocity
-ball = vp.sphere(pos=vp.vec(0,0,0), vel=vp.vec(10,0,0), mass=6.35, radius=.04)
+ball = vp.sphere(pos=vp.vec(0,.6,9.144), vel=vp.vec(10,0,0), mass=6.35, radius=.04, make_trail=True)
 ball.pos = vp.vec(0,.6,9.144)
-ball.vel= vp.vec(0,0,-00.5)
+ball.vel= vp.vec(0,0,-.005)
 
 # Lane (meters)
 lane = vp.box(pos=vp.vec(0,0,0), width=1.0668, height=18.288, color=vp.color.red) 
