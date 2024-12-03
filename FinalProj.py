@@ -5,6 +5,9 @@ dt = 0.01
 scene.camera.pos = vec(0,1.5,-4.5)
 
 # A 14 lb (6.35 kg) Bowling Ball with 10 initial velocity
+ball = sphere(pos=vec(0,.6,9.144), vel=vec(10,0,0), mass=6.35, radius=.04, make_trail=True)
+ball.pos = vec(0,.6,9.144)
+ball.vel= vec(0,0,-.005)
 ball = sphere(pos=vec(0,0,0), vel=vec(1,0,0), mass=6.35, radius=.04)
 ball.pos = vec(0,.6,9.144)
 ball.vel= vec(0,0,-00.5)
