@@ -1,4 +1,3 @@
-import os
 from vpython import *
 #initialize the global variables
 dt = 0.01
@@ -13,7 +12,6 @@ ball.vel= vec(0,0,-00.5)
 # Lane (meters)
 lane = box(pos=vec(0,0,0), width=1.0668, height=18.288, color=color.red) 
 lane.rotate(axis=vec(1,0,0), angle=pi/2, origin=lane.pos)
-
 
 #MAIN LOOP START
 t = 0
