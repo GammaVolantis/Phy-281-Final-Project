@@ -30,6 +30,15 @@ ball = sphere(
 # Lane (meters)
 lane = box(pos=vec(0, 0, 0), width=1.0668, height=18.288, color=color.red)
 lane.rotate(axis=vec(1, 0, 0), angle=pi/2, origin=lane.pos)
+laneAr = []
+def laneGenerator(laneArray,size,wid,len):
+    tempBox = box(pos=vec(0,0,0, width=(1.0668/wid),length=(18.288/len), color=color.red))
+    # for range(0,len):
+    #     for range(0,wid):
+            #generate an array of box objects in the correct pos and orientation
+            #color based on their mew value and set the mew value
+        
+
 
 def velocityRotationUpdate(b):
     # Vector from the center of the ball to the floor
