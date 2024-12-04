@@ -1,51 +1,62 @@
 from vpython import *
-#initialize the global variables
-dt = 0.01
-mew = 0.02
-scene.camera.pos = vec(0,1.5,-4.5)
 
-# A 14 lb (6.35 kg) Bowling Ball with 10 initial velocity
-ball = sphere(pos=vec(0,.6,9.144), vel=vec(0,0,-5.36), mass=6.35, radius=.04, make_trail=True, trail_radius=0.02, retain = 35, omega =vec(0,.5,0))
+# Initialize global variables
+dt = 0.01
+mew = 0.02  # Friction coefficient
+gravity = 9.81  # Gravity
+scene.camera.pos = vec(0, 2.5, 0)
+
+# A 14 lb (6.35 kg) Bowling Ball with initial velocity
+ball = sphere(
+    pos=vec(0, 0.6, 9.144),  # Initial position
+    vel=vec(0, 0, -5.36),    # Initial velocity
+    mass=6.35,               # Mass
+    radius=0.04,             # Radius
+    make_trail=True,
+    trail_radius=0.02,
+    retain=35,
+    omega=vec(-.5, 0, 0)       # Initial angular velocity
+)
 
 # Lane (meters)
-lane = box(pos=vec(0,0,0), width=1.0668, height=18.288, color=color.red) 
-lane.rotate(axis=vec(1,0,0), angle=pi/2, origin=lane.pos)
+lane = box(pos=vec(0, 0, 0), width=1.0668, height=18.288, color=color.red)
+lane.rotate(axis=vec(1, 0, 0), angle=pi/2, origin=lane.pos)
 
 def velocityRotationUpdate(b):
-    #relative velocity  
-    vrel = b.vel + cross(b.omega,b.pos)
-    #force calculation
-    Force = mew*b.mass*9.81*(-vrel)
-    #torque calculation
-    Torque = cross(b.pos,Force)
-    #change in velocity
-    b.vel = b.vel + (Force/b.mass)*dt
-    #change in rotationalvelocity
-    I = (2/5)*b.mass*b.radius**2
-    deltButt = (Torque/I)*dt
-    #change in r
-    b.pos = b.pos + b.vel*dt
-    b.rotate(axis=hat(deltButt),angle=mag(deltButt)*dt)
-def velupdate(b):
-    b.pos=b.pos+b.vel*dt
-    return b
+    # Vector from the center of the ball to the floor
+    r = vec(0, -b.radius, 0)
 
-#MAIN LOOP START
+    # Relative velocity
+    v_rel = b.vel + cross(b.omega, r)
+
+    # Force
+    Force = mew * b.mass * gravity * (-hat(v_rel))
+
+    # Torque
+    Torque = cross(r, Force)
+
+    # Update velocity
+    b.vel = b.vel + (Force / b.mass) * dt
+
+    # Update angular velocity
+    I = (2 / 5) * b.mass * b.radius ** 2  # Moment of inertia for a solid sphere
+    b.omega = b.omega + (Torque / I) * dt
+
+    # Update the ball's rotation
+    b.rotate(axis=hat(b.omega), angle=mag(b.omega) * dt)
+
+# Main loop
 t = 0
 while True:
-    rate(1/dt)
-    t = t + dt
-    
-    # Position Update
-    #velupdate(ball)
+    rate(1 / dt)
+    t += dt
+
+    # Update ball position and velocity
     velocityRotationUpdate(ball)
-    #ball.pos=ball.pos+ball.vel*dt
+
+    # Update position
+    ball.pos = ball.pos + ball.vel * dt
     scene.camera.pos = scene.camera.pos + ball.vel * dt
 
-    print("velocity = " + str(ball.vel))
-
-
-# MAIN LOOP END
-
-
-
+    # Print velocity for debugging
+    print(f"Velocity: {ball.vel}, Angular velocity: {ball.omega}")
