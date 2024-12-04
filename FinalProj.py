@@ -1,30 +1,42 @@
 from vpython import *
 
-running = False
+running = True
 def Run(b):
     global running
     running = not running
-    if running: b.text = "Stop"
+    if running: b.text = "Pause"
     else: b.text = "Play"
 
-button(text="Play", pos=scene.title_anchor, bind=Run)
+button(text="Pause", pos=scene.title_anchor, bind=Run)
 
 # Initialize global variables
 dt = 0.01
 mew = 0.02  # Friction coefficient
 gravity = 9.81  # Gravity
 scene.camera.pos = vec(0, 2.5, 0)
+ballPos = vec(0,0.6,9.144)
+
+# slider ball start pos
+def setsPos(s):
+    wt.text = '{:1.2f}'.format(s.value)
+
+slPos = slider(min=-0.5, max=0.5, value=ballPos.x, length=220, bind=setsPos, right=1)
+
+wt = wtext(text='{:1.2f}'.format(slPos.value))
+# slider angle
+
+# text angular speed
 
 # A 14 lb (6.35 kg) Bowling Ball with initial velocity
 ball = sphere(
-    pos=vec(0, 0.6, 9.144),  # Initial position
-    vel=vec(0, 0, -5.36),    # Initial velocity
+    pos=vec(slPos.value,ballPos.y,ballPos.z),  # Initial position
+    vel=vec(0,0,0),    # Initial velocity
     mass=6.35,               # Mass
     radius=0.04,             # Radius
     make_trail=True,
     trail_radius=0.02,
     retain=35,
-    omega=vec(0, 0, 100)     # Initial angular velocity
+    omega=vec(0, 0, 0)     # Initial angular velocity
 )
 
 # Lane (meters)
@@ -63,6 +75,18 @@ def velocityRotationUpdate(b):
     # Update the ball's rotation
     b.rotate(axis=hat(b.omega), angle=mag(b.omega) * dt)
 
+# throwing ball button
+start = False
+def Start(b):
+    global start
+    start = True
+    if start: 
+        b.text = "Rolling"
+        ball.vel = vec(0, 0, -5.36)
+        ball.omega = vec(0,0,100)
+
+button(text="Throw", pos=scene.title_anchor, bind=Start)
+
 # Main loop
 t = 0
 scene.append_to_caption('Angular Velocity: ')
@@ -83,6 +107,10 @@ ww = winput(prompt='', bind=ChangeAngularVel, type='numeric')
 
 while True:
     if running:
+
+        while not start:
+            ball.pos.x = slPos.value
+        
         rate(1 / dt)
         t += dt
 
