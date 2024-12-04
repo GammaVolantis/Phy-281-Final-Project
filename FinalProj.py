@@ -13,9 +13,7 @@ button(text="Pause", pos=scene.title_anchor, bind=Run)
 dt = 0.01
 mew = 0.02  # Friction coefficient
 gravity = 9.81  # Gravity
-scene.camera.pos = vec(0, 2.5, 0)
 ballPos = vec(0,0.6,9.144)
-
 # slider ball start pos
 def setsPos(s):
     wt.text = '{:1.2f}'.format(s.value)
@@ -36,18 +34,28 @@ ball = sphere(
     retain=35,
     omega=vec(0, 0, 0)     # Initial angular velocity
 )
+scene.camera.pos = vec(0, 1.9+ball.pos.y, 14-ball.pos.z)
 
 # Lane (meters)
-lane = box(pos=vec(0, 0, 0), width=1.0668, height=18.288, color=color.red)
-lane.rotate(axis=vec(1, 0, 0), angle=pi/2, origin=lane.pos)
+#lane = box(pos=vec(0, 0, 0), width=1.0668, height=18.288, color=color.red)
+#lane.rotate(axis=vec(1, 0, 0), angle=pi/2, origin=lane.pos)
 laneAr = []
-def laneGenerator(laneArray,size,wid,len):
-    tempBox = box(pos=vec(0,0,0, width=(1.0668/wid),length=(18.288/len), color=color.red))
-    # for range(0,len):
-    #     for range(0,wid):
-            #generate an array of box objects in the correct pos and orientation
-            #color based on their mew value and set the mew value
-        
+
+def laneGenerator(laneArray,wid,len):
+    global laneAr
+    tempBox = [(1.0668/wid),(18.288/len), color.green]
+    for i in range(0,len):
+       for j in range(0,wid):
+            #print(f"{(1.0668/wid)*j+((1.0668/wid)/2)} and {(18.288/len)*i+(18.288/len)/2}")
+            laneAr.append(box(
+                pos =vec(((1.0668/wid)*j+((1.0668/wid)/2)),0,((18.288/len)*i+(18.288/len)/2)),
+                width =tempBox[0],
+                height = tempBox[1],
+                color = tempBox[2]
+            ))
+    for l in laneAr:
+        l.rotate(axis=vec(1, 0, 0), angle=pi/2, origin=l.pos)
+        l.pos=l.pos + vec(-0.5334,0,-10)
 
 
 def velocityRotationUpdate(b):
@@ -85,6 +93,7 @@ def Start(b):
 
 button(text="Throw", pos=scene.title_anchor, bind=Start)
 
+laneGenerator(laneAr,5,10)
 # Main loop
 t = 0
 scene.append_to_caption('Angular Velocity: ')
@@ -123,5 +132,7 @@ while True:
         ball.pos = ball.pos + ball.vel * dt
         scene.camera.pos = scene.camera.pos + ball.vel * dt
 
+    # Print velocity for debugging
+    #print(f"Velocity: {ball.vel}, Angular velocity: {ball.omega}")
         # Print velocity for debugging
         print(f"Velocity: {ball.vel}, Angular velocity: {ball.omega}")
