@@ -25,15 +25,13 @@ slPos = slider(min=-0.5, max=0.5, value=ballPos.x, length=220, bind=setsPos, rig
 wt = wtext(text='{:1.2f}'.format(slPos.value))
 # slider angle
 
-# text angular speed
-
 # A 14 lb (6.35 kg) Bowling Ball with initial velocity
 ball = sphere(
     pos=vec(slPos.value,ballPos.y,ballPos.z),  # Initial position
     vel=vec(0,0,0),    # Initial velocity
     mass=6.35,               # Mass
     radius=0.04,             # Radius
-    make_trail=True,
+    make_trail=False,
     trail_radius=0.02,
     retain=35,
     omega=vec(0, 0, 0)     # Initial angular velocity
@@ -108,9 +106,13 @@ ww = winput(prompt='', bind=ChangeAngularVel, type='numeric')
 while True:
     if running:
 
+        # Sets position before the user throws the ball
         while not start:
+            ball.make_trail = False
             ball.pos.x = slPos.value
-        
+
+        #brings trail in
+        ball.make_trail= True
         rate(1 / dt)
         t += dt
 
