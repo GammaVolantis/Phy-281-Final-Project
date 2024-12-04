@@ -65,6 +65,22 @@ def velocityRotationUpdate(b):
 
 # Main loop
 t = 0
+scene.append_to_caption('Angular Velocity: ')
+
+# Getting user input
+def ChangeAngularVel(evt):
+    AV = evt.text
+    try:
+        AV = int(AV)
+        scene.append_to_caption('\nAngular Velocity is: ' + str(AV) + '\n')
+        ball.omega = vec(0, 0, AV)
+    except ValueError:  # Handle invalid input
+        scene.append_to_caption('\nBAD INPUT: Please enter a valid number.\n')
+
+# winput to create the input box on the screen
+ww = winput(prompt='', bind=ChangeAngularVel, type='numeric')
+
+
 while True:
     if running:
         rate(1 / dt)
