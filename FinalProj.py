@@ -1,5 +1,14 @@
 from vpython import *
 
+running = False
+def Run(b):
+    global running
+    running = not running
+    if running: b.text = "Stop"
+    else: b.text = "Play"
+
+button(text="Play", pos=scene.title_anchor, bind=Run)
+
 # Initialize global variables
 dt = 0.01
 mew = 0.02  # Friction coefficient
@@ -15,7 +24,7 @@ ball = sphere(
     make_trail=True,
     trail_radius=0.02,
     retain=35,
-    omega=vec(-.5, 0, 0)       # Initial angular velocity
+    omega=vec(0, 0, 100)     # Initial angular velocity
 )
 
 # Lane (meters)
@@ -48,15 +57,16 @@ def velocityRotationUpdate(b):
 # Main loop
 t = 0
 while True:
-    rate(1 / dt)
-    t += dt
+    if running:
+        rate(1 / dt)
+        t += dt
 
-    # Update ball position and velocity
-    velocityRotationUpdate(ball)
+        # Update ball position and velocity
+        velocityRotationUpdate(ball)
 
-    # Update position
-    ball.pos = ball.pos + ball.vel * dt
-    scene.camera.pos = scene.camera.pos + ball.vel * dt
+        # Update position
+        ball.pos = ball.pos + ball.vel * dt
+        scene.camera.pos = scene.camera.pos + ball.vel * dt
 
-    # Print velocity for debugging
-    print(f"Velocity: {ball.vel}, Angular velocity: {ball.omega}")
+        # Print velocity for debugging
+        print(f"Velocity: {ball.vel}, Angular velocity: {ball.omega}")
