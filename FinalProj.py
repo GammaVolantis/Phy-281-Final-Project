@@ -13,7 +13,10 @@ button(text="Pause", pos=scene.title_anchor, bind=Run)
 dt = 0.01
 mew = 0.02  # Friction coefficient
 gravity = 9.81  # Gravity
-ballPos = vec(0,0.6,9.144)
+ballPos = vec(0,0.15,8.2)
+ballAngleArrow = arrow(radius=0.3, pos=vector(ballPos.x,ballPos.y,ballPos.z), color=color.red, emissive=True, axis=vec(0,0,-1), shaftwidth=.02)
+# pin1 = cylinder(pos=vec(0, 1, 0), axis=vec(0, 2, 0), color=color.red, radius=.04, length=.5)
+
 # slider ball start pos
 def setsPos(s):
     wt.text = '{:1.2f}'.format(s.value)
@@ -26,7 +29,7 @@ wt = wtext(text='{:1.2f}'.format(slPos.value))
 # A 14 lb (6.35 kg) Bowling Ball with initial velocity
 ball = sphere(
     pos=vec(slPos.value,ballPos.y,ballPos.z),  # Initial position
-    vel=vec(0,0,0),    # Initial velocity
+    vel=vec(0,0,0),          # Initial velocity
     mass=6.35,               # Mass
     radius=0.04,             # Radius
     make_trail=False,
@@ -34,7 +37,7 @@ ball = sphere(
     retain=35,
     omega=vec(0, 0, 0)     # Initial angular velocity
 )
-scene.camera.pos = vec(0, 1.9+ball.pos.y, 14-ball.pos.z)
+scene.camera.pos = vec(0, 1.8+ballPos.y, 14-ballPos.z)
 
 # Lane (meters)
 #lane = box(pos=vec(0, 0, 0), width=1.0668, height=18.288, color=color.red)
@@ -109,7 +112,6 @@ def Start(b):
     if start: 
         b.text = "Rolling"
         ball.vel = vec(0, 0, -5.36)
-        ball.omega = vec(0,0,100)
 
 button(text="Throw", pos=scene.title_anchor, bind=Start)
 
@@ -139,6 +141,7 @@ while True:
         while not start:
             ball.make_trail = False
             ball.pos.x = slPos.value
+            ballAngleArrow.pos = ball.pos
 
         #brings trail in
         ball.make_trail= True
