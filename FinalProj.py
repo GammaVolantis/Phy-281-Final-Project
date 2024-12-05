@@ -14,6 +14,9 @@ dt = 0.01
 mew = 0.02  # Friction coefficient
 gravity = 9.81  # Gravity
 ballPos = vec(0,0.15,8.2)
+ballAngleArrow = arrow(radius=0.3, pos=vector(ballPos.x,ballPos.y,ballPos.z), color=color.red, emissive=True, axis=vec(0,0,-1), shaftwidth=.02)
+# pin1 = cylinder(pos=vec(0, 1, 0), axis=vec(0, 2, 0), color=color.red, radius=.04, length=.5)
+
 # slider ball start pos
 def setsPos(s):
     wt.text = '{:1.2f}'.format(s.value)
@@ -26,7 +29,7 @@ wt = wtext(text='{:1.2f}'.format(slPos.value))
 # A 14 lb (6.35 kg) Bowling Ball with initial velocity
 ball = sphere(
     pos=vec(slPos.value,ballPos.y,ballPos.z),  # Initial position
-    vel=vec(0,0,0),    # Initial velocity
+    vel=vec(0,0,0),          # Initial velocity
     mass=6.35,               # Mass
     radius=0.04,             # Radius
     make_trail=False,
@@ -110,7 +113,7 @@ def ChangeAngularVel(evt):
 
 # winput to create the input box on the screen
 ww = winput(prompt='', bind=ChangeAngularVel, type='numeric')
-ballAngleArrow = arrow(radius=0.3, pos=vector(ballPos.x,ballPos.y,ballPos.z), color=color.red, emissive=True, axis=vec(0,0,-1), shaftwidth=.02)
+
 
 while True:
     if running:
