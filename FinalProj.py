@@ -119,6 +119,7 @@ while True:
         while not start:
             ball.make_trail = False
             ball.pos.x = slPos.value
+            ballAngleArrow.pos = ball.pos
 
         #brings trail in
         ball.make_trail= True
