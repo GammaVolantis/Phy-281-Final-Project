@@ -94,6 +94,7 @@ def Start(b):
 button(text="Throw", pos=scene.title_anchor, bind=Start)
 
 laneGenerator(laneAr,5,10)
+
 # Main loop
 t = 0
 scene.append_to_caption('\nAngular Velocity: ')
@@ -110,7 +111,7 @@ def ChangeAngularVel(evt):
 
 # winput to create the input box on the screen
 ww = winput(prompt='', bind=ChangeAngularVel, type='numeric')
-
+ballAngleArrow = arrow(radius=0.3, pos=vector(ballPos.x,ballPos.y,ballPos.z), color=color.red, emissive=True, axis=vec(0,0,-1), shaftwidth=.02)
 
 while True:
     if running:
