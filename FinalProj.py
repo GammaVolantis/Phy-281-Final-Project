@@ -1,5 +1,5 @@
 from vpython import *
-
+import random
 running = True
 def Run(b):
     global running
@@ -43,21 +43,41 @@ laneAr = []
 
 def laneGenerator(laneArray,wid,len):
     global laneAr
-    tempBox = [(1.0668/wid),(18.288/len), color.green]
-    for i in range(0,len):
-       for j in range(0,wid):
+    tempBox = [(1.0668/wid),(18.288/len), vector(random.random(),random.random(),random.random())]
+    for i in range(len):
+       for j in range(wid):
+            tempBox[2] = vector(random.random(),random.random(),random.random())
+            posX = (1.0668/wid)*j+(1.0668/wid)/2
+            posY = (18.288/len)*i+(18.288/len)/2
             #print(f"{(1.0668/wid)*j+((1.0668/wid)/2)} and {(18.288/len)*i+(18.288/len)/2}")
             laneAr.append(box(
-                pos =vec(((1.0668/wid)*j+((1.0668/wid)/2)),0,((18.288/len)*i+(18.288/len)/2)),
-                width =tempBox[0],
+                pos = vector(posX,0,posY),
+                size = vector(tempBox[0],tempBox[0],tempBox[1]),
                 height = tempBox[1],
                 color = tempBox[2]
-            ))
-    for l in laneAr:
-        l.rotate(axis=vec(1, 0, 0), angle=pi/2, origin=l.pos)
+            ))        
+    for l in laneAr:    
+        #l.rotate(axis=vec(1, 0, 0), angle=pi/2, origin=l.pos)
         l.pos=l.pos + vec(-0.5334,0,-10)
-
-
+        pass
+    oilingLane(laneAr)
+def oilingLane(lane):
+    for l in lane:
+        x = l.pos.x #+0.3534
+        y = -l.pos.z+10
+    #-37.5\left(x-\frac{.8}{2}\right)\left(x+\frac{.8}{2}\right)
+        if -37.5*(x-0.4)*(x+0.4)>=y :
+            l.mew = 0.01
+            l.color = color.blue
+        elif -28.2*(x-0.5534)*(x+0.5534)>=y :
+            l.mew = 0.05
+            l.color = color.cyan
+        elif abs(x**3)+0.5>=y*abs(x**3) :
+             l.mew = 0.02
+             l.color = color.blue
+        else :
+            l.mew = 0.04
+            l.color = color.cyan
 def velocityRotationUpdate(b):
     # Vector from the center of the ball to the floor
     r = vec(0, -b.radius, 0)
@@ -93,7 +113,7 @@ def Start(b):
 
 button(text="Throw", pos=scene.title_anchor, bind=Start)
 
-laneGenerator(laneAr,5,10)
+laneGenerator(laneAr,70,150)
 # Main loop
 t = 0
 scene.append_to_caption('\nAngular Velocity: ')
