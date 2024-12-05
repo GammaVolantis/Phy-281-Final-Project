@@ -89,7 +89,6 @@ def Start(b):
     if start: 
         b.text = "Rolling"
         ball.vel = vec(0, 0, -5.36)
-        ball.omega = vec(0,0,100)
 
 button(text="Throw", pos=scene.title_anchor, bind=Start)
 
