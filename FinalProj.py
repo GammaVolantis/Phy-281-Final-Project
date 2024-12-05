@@ -96,7 +96,7 @@ button(text="Throw", pos=scene.title_anchor, bind=Start)
 laneGenerator(laneAr,5,10)
 # Main loop
 t = 0
-scene.append_to_caption('Angular Velocity: ')
+scene.append_to_caption('\nAngular Velocity: ')
 
 # Getting user input
 def ChangeAngularVel(evt):
