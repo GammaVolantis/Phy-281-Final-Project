@@ -13,7 +13,7 @@ button(text="Pause", pos=scene.title_anchor, bind=Run)
 dt = 0.01
 mew = 0.02  # Friction coefficient
 gravity = 9.81  # Gravity
-ballPos = vec(0,0.6,9.144)
+ballPos = vec(0,0.15,8.2)
 # slider ball start pos
 def setsPos(s):
     wt.text = '{:1.2f}'.format(s.value)
@@ -34,7 +34,7 @@ ball = sphere(
     retain=35,
     omega=vec(0, 0, 0)     # Initial angular velocity
 )
-scene.camera.pos = vec(0, 1.9+ball.pos.y, 14-ball.pos.z)
+scene.camera.pos = vec(0, 1.8+ballPos.y, 14-ballPos.z)
 
 # Lane (meters)
 #lane = box(pos=vec(0, 0, 0), width=1.0668, height=18.288, color=color.red)
