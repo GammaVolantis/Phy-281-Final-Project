@@ -1,21 +1,38 @@
 from vpython import *
 import random
-running = True
-def Run(b):
-    global running
-    running = not running
-    if running: b.text = "Pause"
-    else: b.text = "Play"
-
-button(text="Pause", pos=scene.title_anchor, bind=Run)
 
 # Initialize global variables
+running = True
 dt = 0.01
 mew = 0.02  # Friction coefficient
 gravity = 9.81  # Gravity
 ballPos = vec(0,0.15,8.2)
 ballAngleArrow = arrow(radius=0.3, pos=vector(ballPos.x,ballPos.y,ballPos.z), color=color.red, emissive=True, axis=vec(0,0,-1), shaftwidth=.02)
-# pin1 = cylinder(pos=vec(0, 1, 0), axis=vec(0, 2, 0), color=color.red, radius=.04, length=.5)
+
+# pin1 = cylinder(pos=vec(0, 0, 0), axis=vec(0, 1, 0), color=color.red, radius=0.12065, length=.381)
+
+def Run(b):
+    global running
+    running = not running
+    if running: b.text = "Pause"
+    else: b.text = "Play"\
+
+button(text="Pause", pos=scene.title_anchor, bind=Run)
+
+def MakePins():
+    xdf = .14
+    ivec = vec(0,0,0)
+    kvec = vec(0,0,0)
+    ivOff = vec(-xdf,0,-2*xdf)
+    jvOff = vec(2*xdf,0,0)
+    for i in range(4):
+        jvec = ivec
+        for k in range(i+1):
+            pin1 = cylinder(pos = jvec, axis=vec(0, 1, 0), color=color.red, radius=0.12065, length=.381)
+            jvec+= jvOff
+            print(jvec)
+        ivec+=ivOff
+
 laneAr = []
 laneX=1.0668
 offX=-laneX/2
@@ -26,11 +43,21 @@ ballAngleArrow = arrow(radius=0.3, pos=vector(ballPos.x,ballPos.y,ballPos.z), co
 # slider ball start pos
 def setsPos(s):
     wt.text = '{:1.2f}'.format(s.value)
-
 slPos = slider(min=-0.5, max=0.5, value=ballPos.x, length=220, bind=setsPos, right=1)
-
 wt = wtext(text='{:1.2f}'.format(slPos.value))
-# slider angle
+
+# Getting user input
+def ChangeAngularVel(evt):
+    AV = evt.text
+    try:
+        AV = int(AV)
+        scene.append_to_caption('\nAngular Velocity is: ' + str(AV) + '\n')
+        ball.omega = vec(0, 0, AV)
+    except ValueError:  # Handle invalid input
+        scene.append_to_caption('\nBAD INPUT: Please enter a valid number.\n')
+
+# winput to create the input box on the screen
+ww = winput(prompt='', bind=ChangeAngularVel, type='numeric')
 
 # A 14 lb (6.35 kg) Bowling Ball with initial velocity
 ball = sphere(
@@ -125,23 +152,10 @@ button(text="Throw", pos=scene.title_anchor, bind=Start)
 
 #laneGenerator(laneAr,1,1)
 laneGenerator(laneAr,70,150)
+MakePins()
 # Main loop
 t = 0
 scene.append_to_caption('\nAngular Velocity: ')
-
-# Getting user input
-def ChangeAngularVel(evt):
-    AV = evt.text
-    try:
-        AV = int(AV)
-        scene.append_to_caption('\nAngular Velocity is: ' + str(AV) + '\n')
-        ball.omega = vec(0, 0, AV)
-    except ValueError:  # Handle invalid input
-        scene.append_to_caption('\nBAD INPUT: Please enter a valid number.\n')
-
-# winput to create the input box on the screen
-ww = winput(prompt='', bind=ChangeAngularVel, type='numeric')
-
 
 while True:
     if running:
