@@ -9,13 +9,27 @@ def Run(b):
 
 button(text="Pause", pos=scene.title_anchor, bind=Run)
 
+def MakePins():
+    xdf = .14
+    ivec = vec(0,0,0)
+    kvec = vec(0,0,0)
+    ivOff = vec(-xdf,0,-2*xdf)
+    jvOff = vec(2*xdf,0,0)
+    for i in range(4):
+        jvec = ivec
+        for k in range(i+1):
+            pin1 = cylinder(pos = jvec, axis=vec(0, 1, 0), color=color.red, radius=0.12065, length=.381)
+            jvec+= jvOff
+            print(jvec)
+        ivec+=ivOff
+
 # Initialize global variables
 dt = 0.01
 mew = 0.02  # Friction coefficient
 gravity = 9.81  # Gravity
 ballPos = vec(0,0.15,8.2)
 ballAngleArrow = arrow(radius=0.3, pos=vector(ballPos.x,ballPos.y,ballPos.z), color=color.red, emissive=True, axis=vec(0,0,-1), shaftwidth=.02)
-# pin1 = cylinder(pos=vec(0, 1, 0), axis=vec(0, 2, 0), color=color.red, radius=.04, length=.5)
+# pin1 = cylinder(pos=vec(0, 0, 0), axis=vec(0, 1, 0), color=color.red, radius=0.12065, length=.381)
 
 # slider ball start pos
 def setsPos(s):
@@ -116,6 +130,7 @@ def Start(b):
 button(text="Throw", pos=scene.title_anchor, bind=Start)
 
 laneGenerator(laneAr,70,150)
+MakePins()
 # Main loop
 t = 0
 scene.append_to_caption('\nAngular Velocity: ')
