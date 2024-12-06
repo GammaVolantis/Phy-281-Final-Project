@@ -5,6 +5,7 @@ import random
 running = True
 start = False
 ballAngle=0
+oldAngle =0
 dt = 0.01
 mew = 0.02  # Friction coefficient
 gravity = 9.81  # Gravity
@@ -49,13 +50,31 @@ def setsPos(s):
 slPos = slider(min=-0.5, max=0.5, value=ballPos.x, length=220, bind=setsPos, right=1)
 wt = wtext(text='{:1.2f}'.format(slPos.value))
 
-#slider Throw angle
-def setsAngle(s):
-    wt.text = '{:1.2f}'.format(degrees(s.value))
-    ballAngleArrow.rotate( angle = s.value, axis=vec(0,1,0), origin=ball.pos )
-slAngle = slider(min = -pi/2, max = pi/2, value=0,length = 220, bind=setsAngle, right= 1 )
-wt = wtext(text='{:1.2f}'.format(degrees(slAngle.value)))
-scene.append_to_caption(' Degrees')
+#input box for angle
+def ChangeAngleOfBall(ev):
+    global ballAngle
+    global oldAngle
+    A = ev.text
+    try:
+        A = int(A)
+        if A>1 and A != oldAngle:
+            ballAngleArrow.rotate(angle=-radians(oldAngle), axis=vec(0,1,0), origin=ball.pos)
+            oldAngle = A
+        if A<1 and A != oldAngle:
+            ballAngleArrow.rotate(angle=radians(oldAngle), axis=vec(0,1,0), origin=ball.pos)
+            oldAngle = A
+        if A == oldAngle:
+            A=0
+            ballAngle=oldAngle
+        else: ballAngle = radians(A)
+        scene.append_to_caption(str(ballAngle)+' Degrees')
+        ballAngleArrow.rotate(angle=-ballAngle, axis=vec(0,1,0), origin=ball.pos)
+
+    except ValueError:  # Handle invalid input
+        scene.append_to_caption('\nBAD INPUT: Please enter a valid number.\n')
+
+# winput to create the input box on the screen
+wa = winput(prompt='', bind=ChangeAngleOfBall, type='numeric')
 # Getting user input
 def ChangeAngularVel(evt):
     AV = evt.text
@@ -154,7 +173,8 @@ def Start(b):
     start = True
     if start: 
         b.text = "Rolling"
-        ball.vel = rotate(vec(0, 0, -1),angle = -slAngle.value,axis= vec(0,1,0))
+        ballAngleArrow.opacity=0
+        ball.vel = rotate(vec(0, 0, -1),angle = -ballAngle,axis= vec(0,1,0))
 
 #-5.36
 button(text="Throw", pos=scene.title_anchor, bind=Start)
@@ -164,6 +184,7 @@ laneGenerator(laneAr,70,150)
 MakePins()
 # Main loop
 t = 0
+scene.append_to_caption('\nDegrees (-90 - 90)')
 scene.append_to_caption('\nAngular Velocity: ')
 
 while True:
@@ -174,7 +195,6 @@ while True:
             ball.make_trail = False
             ball.pos.x = slPos.value
             ballAngleArrow.pos = ball.pos
-            ballAngleArrow.rotate(angle = degrees(ballAngle),axis = vec(0,1,0), origin=ball.pos)
 
 
         #brings trail in
