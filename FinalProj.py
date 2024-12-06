@@ -51,10 +51,11 @@ wt = wtext(text='{:1.2f}'.format(slPos.value))
 
 #slider Throw angle
 def setsAngle(s):
-    wt.text = '{:1.2f}'.format(s.value)
+    wt.text = '{:1.2f}'.format(degrees(s.value))
     ballAngleArrow.rotate( angle = s.value, axis=vec(0,1,0), origin=ball.pos )
-slAngle = slider(min = -pi/2, max = pi/2, value=0,length = 220, bind=setsAngle, right= 0.5 )
-wt = wtext(text='{:1.2f}'.format(slAngle.value))
+slAngle = slider(min = -pi/2, max = pi/2, value=0,length = 220, bind=setsAngle, right= 1 )
+wt = wtext(text='{:1.2f}'.format(degrees(slAngle.value)))
+scene.append_to_caption(' Degrees')
 # Getting user input
 def ChangeAngularVel(evt):
     AV = evt.text
