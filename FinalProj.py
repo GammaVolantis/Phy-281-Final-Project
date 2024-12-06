@@ -3,6 +3,8 @@ import random
 
 # Initialize global variables
 running = True
+start = False
+ballAngle=0
 dt = 0.01
 mew = 0.02  # Friction coefficient
 gravity = 9.81  # Gravity
@@ -47,6 +49,12 @@ def setsPos(s):
 slPos = slider(min=-0.5, max=0.5, value=ballPos.x, length=220, bind=setsPos, right=1)
 wt = wtext(text='{:1.2f}'.format(slPos.value))
 
+#slider Throw angle
+def setsAngle(s):
+    wt.text = '{:1.2f}'.format(s.value)
+    ballAngleArrow.rotate( angle = s.value, axis=vec(0,1,0), origin=ball.pos )
+slAngle = slider(min = -pi/2, max = pi/2, value=0,length = 220, bind=setsAngle, right= 0.5 )
+wt = wtext(text='{:1.2f}'.format(slAngle.value))
 # Getting user input
 def ChangeAngularVel(evt):
     AV = evt.text
@@ -72,7 +80,6 @@ ball = sphere(
     omega=vec(0, 0, 0)     # Initial angular velocity
 )
 scene.camera.pos = vec(0, 1.8+ballPos.y, 14-ballPos.z)
-
 # Lane (meters)
 #lane = box(pos=vec(0, 0, 0), width=1.0668, height=18.288, color=color.red)
 #lane.rotate(axis=vec(1, 0, 0), angle=pi/2, origin=lane.pos)
@@ -141,14 +148,14 @@ def velocityRotationUpdate(b):
     b.rotate(axis=hat(b.omega), angle=mag(b.omega) * dt)
 
 # throwing ball button
-start = False
 def Start(b):
     global start
     start = True
     if start: 
         b.text = "Rolling"
-        ball.vel = vec(0, 0, -5.36)
+        ball.vel = rotate(vec(0, 0, -1),angle = -slAngle.value,axis= vec(0,1,0))
 
+#-5.36
 button(text="Throw", pos=scene.title_anchor, bind=Start)
 
 #laneGenerator(laneAr,1,1)
@@ -166,6 +173,8 @@ while True:
             ball.make_trail = False
             ball.pos.x = slPos.value
             ballAngleArrow.pos = ball.pos
+            ballAngleArrow.rotate(angle = degrees(ballAngle),axis = vec(0,1,0), origin=ball.pos)
+
 
         #brings trail in
         ball.make_trail= True
