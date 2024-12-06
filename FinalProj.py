@@ -16,7 +16,13 @@ gravity = 9.81  # Gravity
 ballPos = vec(0,0.15,8.2)
 ballAngleArrow = arrow(radius=0.3, pos=vector(ballPos.x,ballPos.y,ballPos.z), color=color.red, emissive=True, axis=vec(0,0,-1), shaftwidth=.02)
 # pin1 = cylinder(pos=vec(0, 1, 0), axis=vec(0, 2, 0), color=color.red, radius=.04, length=.5)
-
+laneAr = []
+laneX=1.0668
+offX=-laneX/2
+laneZ=18.288
+offZ=-laneZ/2
+ballPos = vec(0,0.10,-offZ)
+ballAngleArrow = arrow(radius=0.3, pos=vector(ballPos.x,ballPos.y,ballPos.z), color=color.red, emissive=True, axis=vec(0,0,-1), shaftwidth=.02)
 # slider ball start pos
 def setsPos(s):
     wt.text = '{:1.2f}'.format(s.value)
@@ -42,27 +48,29 @@ scene.camera.pos = vec(0, 1.8+ballPos.y, 14-ballPos.z)
 # Lane (meters)
 #lane = box(pos=vec(0, 0, 0), width=1.0668, height=18.288, color=color.red)
 #lane.rotate(axis=vec(1, 0, 0), angle=pi/2, origin=lane.pos)
-laneAr = []
+
 
 def laneGenerator(laneArray,wid,len):
     global laneAr
-    tempBox = [(1.0668/wid),(18.288/len), vector(random.random(),random.random(),random.random())]
+    global laneX
+    global offX
+    global laneZ
+    global offZ
+    x=(1.0668/wid)
+    z=(18.288/len)
+    tempBox = [x,z, vector(random.random(),random.random(),random.random())]
     for i in range(len):
        for j in range(wid):
             tempBox[2] = vector(random.random(),random.random(),random.random())
-            posX = (1.0668/wid)*j+(1.0668/wid)/2
-            posY = (18.288/len)*i+(18.288/len)/2
-            #print(f"{(1.0668/wid)*j+((1.0668/wid)/2)} and {(18.288/len)*i+(18.288/len)/2}")
+            posX = x*j+x/2
+            posZ = z*i+z/2
+            print(f"{(x*j+x/2)+offX} and {(z*i+z/2)+offZ}")
             laneAr.append(box(
-                pos = vector(posX,0,posY),
+                pos = vector(posX+offX,0,posZ+offZ),
                 size = vector(tempBox[0],tempBox[0],tempBox[1]),
                 height = tempBox[1],
                 color = tempBox[2]
             ))        
-    for l in laneAr:    
-        #l.rotate(axis=vec(1, 0, 0), angle=pi/2, origin=l.pos)
-        l.pos=l.pos + vec(-0.5334,0,-10)
-        pass
     oilingLane(laneAr)
 def oilingLane(lane):
     for l in lane:
@@ -115,6 +123,7 @@ def Start(b):
 
 button(text="Throw", pos=scene.title_anchor, bind=Start)
 
+#laneGenerator(laneAr,1,1)
 laneGenerator(laneAr,70,150)
 # Main loop
 t = 0
@@ -158,4 +167,4 @@ while True:
     # Print velocity for debugging
     #print(f"Velocity: {ball.vel}, Angular velocity: {ball.omega}")
         # Print velocity for debugging
-        print(f"Velocity: {ball.vel}, Angular velocity: {ball.omega}")
+        #print(f"Velocity: {ball.vel}, Angular velocity: {ball.omega}")
