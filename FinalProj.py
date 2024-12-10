@@ -97,7 +97,7 @@ def ChangeAngularVel(evt):
         scene.append_to_caption('\nBAD INPUT: Please enter a valid number.\n')
 
 # winput to create the input box on the screen
-scene.append_to_caption('\nAngular Velocity: ')
+scene.append_to_caption('\nAngular Velocity (-): RIGHT, (+): LEFT: ')
 ww = winput(prompt='', bind=ChangeAngularVel, type='numeric')
 
 # A 14 lb (6.35 kg) Bowling Ball with initial velocity
