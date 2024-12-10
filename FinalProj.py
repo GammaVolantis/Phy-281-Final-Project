@@ -226,7 +226,18 @@ def velocityRotationUpdate(b):
 
     # Update the ball's rotation
     b.rotate(axis=hat(b.omega), angle=mag(b.omega) * dt)
-
+def guttersBackStop():
+    global ball
+    global running
+    if ball.pos.z<-10.5:
+        running = False
+    else:
+        if ball.pos.x < -gutter:
+            ball.omega = vec(0,0,0)
+            ball.vel = vec(0,0,-4)
+        if ball.pos.x > gutter:
+            ball.omega = vec(0,0,0)
+            ball.vel = vec(0,0,-4)
 # throwing ball button
 def Start(b):
     global start
@@ -273,16 +284,8 @@ while True:
         scene.camera.pos = scene.camera.pos + ball.vel * dt
 
         # Gutter ball
-        if ball.pos.x < -gutter:
-            ball.omega = vec(0,0,0)
-            ball.vel = vec(0,0,-4)
-            if ball.pos.z<-9.5:
-                running = False
-        if ball.pos.x > gutter:
-            ball.omega = vec(0,0,0)
-            ball.vel = vec(0,0,-4)
-            if ball.pos.z<-9.5:
-                running = False
+        guttersBackStop()
+
 
     # Print velocity for debugging
         #print(f"Velocity: {ball.vel}, Angular velocity: {ball.omega}")
