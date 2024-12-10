@@ -138,18 +138,32 @@ def oilingLane(lane):
         x = l.pos.x #+0.3534
         y = -l.pos.z+10
     #-37.5\left(x-\frac{.8}{2}\right)\left(x+\frac{.8}{2}\right)
+        if (l.pos.z<offZ-offZ/3.5):
+            l.color = color.yellow
+        else:   
+            if -37.5*(x-0.4)*(x+0.4)>=y :
+                l.color = color.blue
+            elif -28.2*(x-0.5534)*(x+0.5534)>=y :
+                l.color = color.cyan
+            elif abs(x**3)+0.5>=y*abs(x**3) :
+                l.color = color.blue
+            else :
+                l.color = color.cyan
+def mewCalculator(l):
+    x = l.pos.x #+0.3534
+    y = -l.pos.z+10
+#-37.5\left(x-\frac{.8}{2}\right)\left(x+\frac{.8}{2}\right)
+    if (l.pos.z<offZ-offZ/3.5):
+        return 0.5 
+    else:   
         if -37.5*(x-0.4)*(x+0.4)>=y :
-            l.mew = 0.01
-            l.color = color.blue
+            return 0.01
         elif -28.2*(x-0.5534)*(x+0.5534)>=y :
-            l.mew = 0.05
-            l.color = color.cyan
+            return 0.02
         elif abs(x**3)+0.5>=y*abs(x**3) :
-             l.mew = 0.02
-             l.color = color.blue
+            return 0.01
         else :
-            l.mew = 0.04
-            l.color = color.cyan
+            return 0.02
 def velocityRotationUpdate(b):
     # Vector from the center of the ball to the floor
     r = vec(0, -b.radius, 0)
@@ -209,6 +223,7 @@ while True:
         t += dt
 
         # Update ball position and velocity
+        mew = mewCalculator(ball)
         velocityRotationUpdate(ball)
 
         # Update position
