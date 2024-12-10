@@ -91,7 +91,7 @@ ww = winput(prompt='', bind=ChangeAngularVel, type='numeric')
 # A 14 lb (6.35 kg) Bowling Ball with initial velocity
 ball = sphere(
     pos=vec(slPos.value,ballPos.y,ballPos.z),  # Initial position
-    vel=vec(0,0,0),          # Initial velocity
+    vel=vec(0,0,-2),         # Initial velocity
     mass=6.35,               # Mass
     radius=0.04,             # Radius
     make_trail=False,
@@ -174,7 +174,7 @@ def Start(b):
     if start: 
         b.text = "Rolling"
         ballAngleArrow.opacity=0
-        ball.vel = rotate(vec(0, 0, -1),angle = -ballAngle,axis= vec(0,1,0))
+        ball.vel = rotate(vec(0, 0, ball.vel.z),angle = -ballAngle,axis= vec(0,1,0))
 
 #-5.36
 button(text="Throw", pos=scene.title_anchor, bind=Start)
@@ -210,6 +210,6 @@ while True:
         scene.camera.pos = scene.camera.pos + ball.vel * dt
 
     # Print velocity for debugging
-    #print(f"Velocity: {ball.vel}, Angular velocity: {ball.omega}")
+        print(f"Velocity: {ball.vel}, Angular velocity: {ball.omega}")
         # Print velocity for debugging
         #print(f"Velocity: {ball.vel}, Angular velocity: {ball.omega}")
