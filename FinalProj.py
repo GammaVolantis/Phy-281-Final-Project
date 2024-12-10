@@ -80,7 +80,6 @@ def collisionSphereCylinder(s,c):
     R = r-(r*a)*a
     d = max(0,mag(dot(r,a))-0.5*c.length)*a*sgn(dot(r,a))+max(0,r*R-(c.pos-c.axis/2))*hat(R)
     
-
 # winput to create the input box on the screen
 scene.append_to_caption('\nEnter Degrees (-90 to 90):')
 wa = winput(prompt='', bind=ChangeAngleOfBall, type='numeric')
@@ -89,7 +88,6 @@ def ChangeAngularVel(evt):
     AV = evt.text
     try:
         AV = int(AV)
-        scene.append_to_caption('\nAngular Velocity is: ' + str(AV) + '\n')
         ball.omega = vec(0, 0, AV)
     except ValueError:  # Handle invalid input
         scene.append_to_caption('\nBAD INPUT: Please enter a valid number.\n')
@@ -125,7 +123,6 @@ gutterRigth = box(
 # Lane (meters)
 #lane = box(pos=vec(0, 0, 0), width=1.0668, height=18.288, color=color.red)
 #lane.rotate(axis=vec(1, 0, 0), angle=pi/2, origin=lane.pos)
-
 
 def laneGenerator(laneArray,wid,len):
     global laneAr
@@ -212,7 +209,6 @@ def Start(b):
         ballAngleArrow.opacity=0
         ball.vel = rotate(vec(0, 0, ball.vel.z),angle = -radians(ballAngle),axis= vec(0,1,0))
 
-#-5.36
 button(text="Throw", pos=scene.title_anchor, bind=Start)
 
 #laneGenerator(laneAr,1,1)
@@ -229,7 +225,6 @@ while True:
             ball.make_trail = False
             ball.pos.x = slPos.value
             ballAngleArrow.pos = ball.pos
-
 
         #brings trail in
         ball.make_trail= True
