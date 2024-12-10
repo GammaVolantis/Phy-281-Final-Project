@@ -186,7 +186,7 @@ def Start(b):
     if start: 
         b.text = "Rolling"
         ballAngleArrow.opacity=0
-        ball.vel = rotate(vec(0, 0, ball.vel.z),angle = -ballAngle,axis= vec(0,1,0))
+        ball.vel = rotate(vec(0, 0, ball.vel.z),angle = -radians(ballAngle),axis= vec(0,1,0))
 
 #-5.36
 button(text="Throw", pos=scene.title_anchor, bind=Start)
