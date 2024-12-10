@@ -97,8 +97,7 @@ ww = winput(prompt='', bind=ChangeAngularVel, type='numeric')
 # A 14 lb (6.35 kg) Bowling Ball with initial velocity
 ball = sphere(
     pos=vec(slPos.value,ballPos.y,ballPos.z),  # Initial position
-    vel=vec(0,0,-2),         # Initial velocity
-    vel=vec(0,0,-5.144),     # Initial velocity
+    vel=vec(0,0,-4),         # Initial velocity
     mass=6.35,               # Mass
     radius=0.04,             # Radius
     make_trail=False,
