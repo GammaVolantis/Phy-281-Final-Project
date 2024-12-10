@@ -47,20 +47,11 @@ def MakePins():
 # slider ball start pos
 def setsPos(s):
     wt.text = '{:1.2f}'.format(s.value)
+
+scene.append_to_caption('\nBall Position:')
 slPos = slider(min=-0.5, max=0.5, value=ballPos.x, length=220, bind=setsPos, right=1)
 wt = wtext(text='{:1.2f}'.format(slPos.value))
 
-def sgn(x):
-    return x/abs(x) if x!=0 else 0
-
-def collisionSphereCylinder(s,c):
-    a = c.axis.hat
-    r = s.pos - c.pos
-    R = r-(r*a)*a
-    d = max(0,mag(dot(r,a))-0.5*c.length)*a*sgn(dot(r,a))+max(0,r*R-(c.pos-c.axis/2))*hat(R)
-    
-
-#input box for angle
 def ChangeAngleOfBall(ev):
     global ballAngle
     global oldAngle
@@ -74,12 +65,26 @@ def ChangeAngleOfBall(ev):
             A=0
             ballAngle=oldAngle
         ballAngleArrow.rotate(angle=radians(-A), axis=vec(0,1,0), origin=ball.pos)
-        scene.append_to_caption(str(oldAngle)+' Degrees')
+        # scene.append_to_caption(str(oldAngle)+' Degrees')
 
     except ValueError:  # Handle invalid input
         scene.append_to_caption('\nBAD INPUT: Please enter a valid number.\n')
 
+def sgn(x):
+    return x/abs(x) if x!=0 else 0
+
+def collisionSphereCylinder(s,c):
+    a = c.axis.hat
+    r = s.pos - c.pos
+    R = r-(r*a)*a
+    d = max(0,mag(dot(r,a))-0.5*c.length)*a*sgn(dot(r,a))+max(0,r*R-(c.pos-c.axis/2))*hat(R)
+    
+
+#input box for angle
+
+
 # winput to create the input box on the screen
+scene.append_to_caption('\nEnter Degrees (-90 to 90):')
 wa = winput(prompt='', bind=ChangeAngleOfBall, type='numeric')
 # Getting user input
 def ChangeAngularVel(evt):
@@ -92,6 +97,7 @@ def ChangeAngularVel(evt):
         scene.append_to_caption('\nBAD INPUT: Please enter a valid number.\n')
 
 # winput to create the input box on the screen
+scene.append_to_caption('\nAngular Velocity: ')
 ww = winput(prompt='', bind=ChangeAngularVel, type='numeric')
 
 # A 14 lb (6.35 kg) Bowling Ball with initial velocity
@@ -204,8 +210,6 @@ laneGenerator(laneAr,70,150)
 MakePins()
 # Main loop
 t = 0
-scene.append_to_caption('\nDegrees (-90 - 90)')
-scene.append_to_caption('\nAngular Velocity: ')
 
 while True:
     if running:
