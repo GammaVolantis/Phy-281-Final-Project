@@ -16,6 +16,7 @@ offX=-laneX/2
 laneZ=18.288
 offZ=-laneZ/2
 ballPos = vec(0,0.10,-offZ)
+gutter = 0.57
 ballAngleArrow = arrow(radius=0.3, pos=vector(ballPos.x,ballPos.y,ballPos.z), color=color.red, emissive=True, axis=vec(0,0,-1), shaftwidth=.02)
 
 # pin1 = cylinder(pos=vec(0, 0, 0), axis=vec(0, 1, 0), color=color.red, radius=0.12065, length=.381)
@@ -114,13 +115,12 @@ def ChangeAngularVel(evt):
     AV = evt.text
     try:
         AV = int(AV)
-        scene.append_to_caption('\nAngular Velocity is: ' + str(AV) + '\n')
         ball.omega = vec(0, 0, AV)
     except ValueError:  # Handle invalid input
         scene.append_to_caption('\nBAD INPUT: Please enter a valid number.\n')
 
 # winput to create the input box on the screen
-scene.append_to_caption('\nAngular Velocity: ')
+scene.append_to_caption('\nAngular Velocity (-): RIGHT, (+): LEFT: ')
 ww = winput(prompt='', bind=ChangeAngularVel, type='numeric')
 
 # A 14 lb (6.35 kg) Bowling Ball with initial velocity
@@ -135,10 +135,21 @@ ball = sphere(
     omega=vec(0, 0, 0)     # Initial angular velocity
 )
 scene.camera.pos = vec(0, 1.8+ballPos.y, 14-ballPos.z)
+# gutters
+gutterLeft = box(
+    pos=vec(-0.6,0,0),
+    size = vec(0.1,0.1,18.288),
+    color = color.red
+)
+gutterRigth = box(
+    pos=vec(0.6,0,0),
+    size = vec(0.1,0.1,18.288),
+    color = color.red
+)
+
 # Lane (meters)
 #lane = box(pos=vec(0, 0, 0), width=1.0668, height=18.288, color=color.red)
 #lane.rotate(axis=vec(1, 0, 0), angle=pi/2, origin=lane.pos)
-
 
 def laneGenerator(laneArray,wid,len):
     global laneAr
@@ -225,7 +236,6 @@ def Start(b):
         ballAngleArrow.opacity=0
         ball.vel = rotate(vec(0, 0, ball.vel.z),angle = -radians(ballAngle),axis= vec(0,1,0))
 
-#-5.36
 button(text="Throw", pos=scene.title_anchor, bind=Start)
 
 #laneGenerator(laneAr,1,1)
@@ -242,7 +252,6 @@ while True:
             ball.make_trail = False
             ball.pos.x = slPos.value
             ballAngleArrow.pos = ball.pos
-
 
         #brings trail in
         ball.make_trail= True
@@ -262,6 +271,18 @@ while True:
         # Update position
         ball.pos = ball.pos + ball.vel * dt
         scene.camera.pos = scene.camera.pos + ball.vel * dt
+
+        # Gutter ball
+        if ball.pos.x < -gutter:
+            ball.omega = vec(0,0,0)
+            ball.vel = vec(0,0,-4)
+            if ball.pos.z<-9.5:
+                running = False
+        if ball.pos.x > gutter:
+            ball.omega = vec(0,0,0)
+            ball.vel = vec(0,0,-4)
+            if ball.pos.z<-9.5:
+                running = False
 
     # Print velocity for debugging
         #print(f"Velocity: {ball.vel}, Angular velocity: {ball.omega}")
