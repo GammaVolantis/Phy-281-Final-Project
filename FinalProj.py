@@ -67,18 +67,14 @@ def ChangeAngleOfBall(ev):
     A = ev.text
     try:
         A = int(A)
-        if A>1 and A != oldAngle:
-            ballAngleArrow.rotate(angle=-radians(oldAngle), axis=vec(0,1,0), origin=ball.pos)
+        if oldAngle!=A:
+            ballAngleArrow.rotate(angle= radians(oldAngle), axis=vec(0,1,0), origin=ball.pos)
             oldAngle = A
-        if A<1 and A != oldAngle:
-            ballAngleArrow.rotate(angle=radians(oldAngle), axis=vec(0,1,0), origin=ball.pos)
-            oldAngle = A
-        if A == oldAngle:
+        elif A == oldAngle:
             A=0
             ballAngle=oldAngle
-        else: ballAngle = radians(A)
-        scene.append_to_caption(str(ballAngle)+' Degrees')
-        ballAngleArrow.rotate(angle=-ballAngle, axis=vec(0,1,0), origin=ball.pos)
+        ballAngleArrow.rotate(angle=radians(-A), axis=vec(0,1,0), origin=ball.pos)
+        scene.append_to_caption(str(oldAngle)+' Degrees')
 
     except ValueError:  # Handle invalid input
         scene.append_to_caption('\nBAD INPUT: Please enter a valid number.\n')
@@ -101,7 +97,7 @@ ww = winput(prompt='', bind=ChangeAngularVel, type='numeric')
 # A 14 lb (6.35 kg) Bowling Ball with initial velocity
 ball = sphere(
     pos=vec(slPos.value,ballPos.y,ballPos.z),  # Initial position
-    vel=vec(0,0,0),          # Initial velocity
+    vel=vec(0,0,-5.144),     # Initial velocity
     mass=6.35,               # Mass
     radius=0.04,             # Radius
     make_trail=False,
