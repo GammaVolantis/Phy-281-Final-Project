@@ -10,6 +10,7 @@ dt = 0.01
 mew = 0.02  # Friction coefficient
 gravity = 9.81  # Gravity
 laneAr = []
+pinAr = []
 laneX=1.0668
 offX=-laneX/2
 laneZ=18.288
@@ -39,9 +40,9 @@ def MakePins():
     for i in range(4):
         jvec = ivec
         for k in range(i+1):
-            pin1 = cylinder(pos = jvec, axis=vec(0, 1, 0), color=color.red, radius=0.12065, length=.381)
+            pinAr.append(cylinder(pos = jvec, axis=vec(0, 1, 0), color=color.red, radius=0.12065, length=.381, vel = vec(0,0,0),mass = 1))
             jvec+= jvOff
-            print(jvec)
+            #print(jvec)
         ivec+=ivOff
 
 # slider ball start pos
@@ -76,9 +77,31 @@ def sgn(x):
 def collisionSphereCylinder(s,c):
     a = c.axis.hat
     r = s.pos - c.pos
-    R = r-(r*a)*a
-    d = max(0,mag(dot(r,a))-0.5*c.length)*a*sgn(dot(r,a))+max(0,r*R-(c.pos-c.axis/2))*hat(R)
-    
+    R = r-(dot(r,a))*a
+    g =max(0,abs(dot(r,a)-0.5*c.length))
+    f = sgn(dot(r,a))
+    k = max(0,dot(r,hat(R))-c.radius)*hat(R)
+    d = g*a*f+k
+    n=hat(d) #COLLISION dont know where go
+    if(s.radius-mag(d)>0):  #CONDITIONAL dont know where go
+        rp =s.pos-s.radius*n #POINT OF CONTACT dont know where go
+        print(rp)
+
+def collide_spheres(a, b):
+    dist = a.pos - b.pos
+    if(mag(dist)<= a.radius+b.radius):
+        #math goes here for circle collisions
+        n=hat(dist)
+        relVel = a.vel-b.vel
+        r = 1
+        ic= dot(relVel,n)
+        if(dot(relVel,n)<0):
+            #impulse
+            print("AHHHH")
+            aj = -((1+r)*(ic)/(1/b.mass+1/a.mass))
+            a.vel += (aj*n)/a.mass
+            print(a.vel)
+            b.vel -= (aj*n)/b.mass
 
 #input box for angle
 
@@ -103,9 +126,9 @@ ww = winput(prompt='', bind=ChangeAngularVel, type='numeric')
 # A 14 lb (6.35 kg) Bowling Ball with initial velocity
 ball = sphere(
     pos=vec(slPos.value,ballPos.y,ballPos.z),  # Initial position
-    vel=vec(0,0,-4),         # Initial velocity
+    vel=vec(0,0,-6),         # Initial velocity
     mass=6.35,               # Mass
-    radius=0.04,             # Radius
+    radius=0.1,            # Radius
     make_trail=False,
     trail_radius=0.02,
     retain=35,
@@ -131,7 +154,7 @@ def laneGenerator(laneArray,wid,len):
             tempBox[2] = vector(random.random(),random.random(),random.random())
             posX = x*j+x/2
             posZ = z*i+z/2
-            print(f"{(x*j+x/2)+offX} and {(z*i+z/2)+offZ}")
+            #print(f"{(x*j+x/2)+offX} and {(z*i+z/2)+offZ}")
             laneAr.append(box(
                 pos = vector(posX+offX,0,posZ+offZ),
                 size = vector(tempBox[0],tempBox[0],tempBox[1]),
@@ -160,7 +183,7 @@ def mewCalculator(l):
     y = -l.pos.z+10
 #-37.5\left(x-\frac{.8}{2}\right)\left(x+\frac{.8}{2}\right)
     if (l.pos.z<offZ-offZ/3.5):
-        return 0.5 
+        return 0.3
     else:   
         if -37.5*(x-0.4)*(x+0.4)>=y :
             return 0.01
@@ -229,12 +252,18 @@ while True:
         # Update ball position and velocity
         mew = mewCalculator(ball)
         velocityRotationUpdate(ball)
+        for p in pinAr:
+            collide_spheres(ball,p)
+            p.pos=p.pos+p.vel*dt
+        for p in pinAr:
+            for g in pinAr:
+                collide_spheres(p,g)
 
         # Update position
         ball.pos = ball.pos + ball.vel * dt
         scene.camera.pos = scene.camera.pos + ball.vel * dt
 
     # Print velocity for debugging
-        print(f"Velocity: {ball.vel}, Angular velocity: {ball.omega}")
+        #print(f"Velocity: {ball.vel}, Angular velocity: {ball.omega}")
         # Print velocity for debugging
         #print(f"Velocity: {ball.vel}, Angular velocity: {ball.omega}")
