@@ -50,6 +50,16 @@ def setsPos(s):
 slPos = slider(min=-0.5, max=0.5, value=ballPos.x, length=220, bind=setsPos, right=1)
 wt = wtext(text='{:1.2f}'.format(slPos.value))
 
+def sgn(x):
+    return x/abs(x) if x!=0 else 0
+
+def collisionSphereCylinder(s,c):
+    a = c.axis.hat
+    r = s.pos - c.pos
+    R = r-(r*a)*a
+    d = max(0,mag(dot(r,a))-0.5*c.length)*a*sgn(dot(r,a))+max(0,r*R-(c.pos-c.axis/2))*hat(R)
+    
+
 #input box for angle
 def ChangeAngleOfBall(ev):
     global ballAngle
@@ -57,18 +67,14 @@ def ChangeAngleOfBall(ev):
     A = ev.text
     try:
         A = int(A)
-        if A>1 and A != oldAngle:
-            ballAngleArrow.rotate(angle=-radians(oldAngle), axis=vec(0,1,0), origin=ball.pos)
+        if oldAngle!=A:
+            ballAngleArrow.rotate(angle= radians(oldAngle), axis=vec(0,1,0), origin=ball.pos)
             oldAngle = A
-        if A<1 and A != oldAngle:
-            ballAngleArrow.rotate(angle=radians(oldAngle), axis=vec(0,1,0), origin=ball.pos)
-            oldAngle = A
-        if A == oldAngle:
+        elif A == oldAngle:
             A=0
             ballAngle=oldAngle
-        else: ballAngle = radians(A)
-        scene.append_to_caption(str(ballAngle)+' Degrees')
-        ballAngleArrow.rotate(angle=-ballAngle, axis=vec(0,1,0), origin=ball.pos)
+        ballAngleArrow.rotate(angle=radians(-A), axis=vec(0,1,0), origin=ball.pos)
+        scene.append_to_caption(str(oldAngle)+' Degrees')
 
     except ValueError:  # Handle invalid input
         scene.append_to_caption('\nBAD INPUT: Please enter a valid number.\n')
@@ -92,6 +98,7 @@ ww = winput(prompt='', bind=ChangeAngularVel, type='numeric')
 ball = sphere(
     pos=vec(slPos.value,ballPos.y,ballPos.z),  # Initial position
     vel=vec(0,0,-2),         # Initial velocity
+    vel=vec(0,0,-5.144),     # Initial velocity
     mass=6.35,               # Mass
     radius=0.04,             # Radius
     make_trail=False,
