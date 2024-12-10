@@ -50,6 +50,16 @@ def setsPos(s):
 slPos = slider(min=-0.5, max=0.5, value=ballPos.x, length=220, bind=setsPos, right=1)
 wt = wtext(text='{:1.2f}'.format(slPos.value))
 
+def sgn(x):
+    return x/abs(x) if x!=0 else 0
+
+def collisionSphereCylinder(s,c):
+    a = c.axis.hat
+    r = s.pos - c.pos
+    R = r-(r*a)*a
+    d = max(0,mag(dot(r,a))-0.5*c.length)*a*sgn(dot(r,a))+max(0,r*R-(c.pos-c.axis/2))*hat(R)
+    
+
 #input box for angle
 def ChangeAngleOfBall(ev):
     global ballAngle
