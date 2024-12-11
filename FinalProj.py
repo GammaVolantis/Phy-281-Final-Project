@@ -16,7 +16,7 @@ offX=-laneX/2
 laneZ=18.288
 offZ=-laneZ/2
 ballPos = vec(0,0.10,-offZ)
-gutter = 0.57
+gutter = 0.63
 ballAngleArrow = arrow(radius=0.3, pos=vector(ballPos.x,ballPos.y,ballPos.z), color=color.red, emissive=True, axis=vec(0,0,-1), shaftwidth=.02)
 
 # pin1 = cylinder(pos=vec(0, 0, 0), axis=vec(0, 1, 0), color=color.red, radius=0.12065, length=.381)
