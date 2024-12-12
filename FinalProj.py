@@ -274,12 +274,14 @@ while True:
         velocityRotationUpdate(ball)
         for p in pinAr:
             collide_spheres(ball,p)
+            p.vel.y = 0 # ignore y direction
             p.pos=p.pos+p.vel*dt
         for p in pinAr:
             for g in pinAr:
                 collide_spheres(p,g)
 
         # Update position
+        ball.vel.y = 0 # ignore y direction
         ball.pos = ball.pos + ball.vel * dt
         scene.camera.pos = scene.camera.pos + ball.vel * dt
 
