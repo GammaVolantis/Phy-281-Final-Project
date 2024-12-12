@@ -7,7 +7,7 @@ start = False
 ballAngle=0
 oldAngle =0
 dt = 0.01
-mew = 0.02  # Friction coefficient
+mew = 0.02      # Friction coefficient
 gravity = 9.81  # Gravity
 laneAr = []
 pinAr = []
@@ -46,7 +46,7 @@ def MakePins():
             #print(jvec)
         ivec+=ivOff
 
-# slider ball start pos
+# Slider ball start pos
 def setsPos(s):
     wt.text = '{:1.2f}'.format(s.value)
 
@@ -104,9 +104,6 @@ def collide_spheres(a, b):
             print(a.vel)
             b.vel -= (aj*n)/b.mass
 
-#input box for angle
-
-
 # winput to create the input box on the screen
 scene.append_to_caption('\nEnter Degrees (-90 to 90):')
 wa = winput(prompt='', bind=ChangeAngleOfBall, type='numeric')
@@ -128,11 +125,11 @@ ball = sphere(
     pos=vec(slPos.value,ballPos.y,ballPos.z),  # Initial position
     vel=vec(0,0,-6),         # Initial velocity
     mass=6.35,               # Mass
-    radius=0.1,            # Radius
+    radius=0.1,              # Radius
     make_trail=False,
     trail_radius=0.02,
     retain=35,
-    omega=vec(0, 0, 0)     # Initial angular velocity
+    omega=vec(0, 0, 0)       # Initial angular velocity
 )
 scene.camera.pos = vec(0, 1.8+ballPos.y, 14-ballPos.z)
 # gutters
